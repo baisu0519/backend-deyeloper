@@ -1,7 +1,6 @@
 package me.baisu;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class TestController {
@@ -14,4 +13,20 @@ public class TestController {
     public String test() {
         return "Hello yzh!";
     }
+    @PostMapping("/test")
+    public String posttest() {
+        return "Hello post!";
+    }
+
+    @PutMapping("/test")
+    public String puttest() {
+        return "Hello put!";
+    }
+
+    @DeleteMapping("/test")
+    public String deletetest() {
+        return "Hello delete!";
+    }
+
+
 }
