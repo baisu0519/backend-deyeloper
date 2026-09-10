@@ -28,5 +28,8 @@ public class TestController {
         return "Hello delete!";
     }
 
-
+    @GetMapping("/member")
+    public String getALLmember() {
+        return "Hello member!";
+    }
 }
