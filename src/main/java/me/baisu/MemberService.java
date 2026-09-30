@@ -10,6 +10,7 @@ public class MemberService {
     @Autowired
     private MemberRepository memberRepository;
     public List<Member> getAllMembers(){
+
         return memberRepository.findAll();
     }
 }
