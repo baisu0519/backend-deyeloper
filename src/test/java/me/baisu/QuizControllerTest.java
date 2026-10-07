@@ -88,7 +88,7 @@ class QuizControllerTest {
 
     @DisplayName("POST: /quiz 요청, 요청 바디에 {'value':2}이면 응답 코드는 200, 응답 본문은 OK!")
     @Test
-    public void postQuiz13() throws Exception {
+    public void postQuiz2() throws Exception {
         // given
         final String url = "/quiz";
 
