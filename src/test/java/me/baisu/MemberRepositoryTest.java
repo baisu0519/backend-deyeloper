@@ -1,5 +1,6 @@
 package me.baisu;
 
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.test.context.jdbc.Sql;
 import java.util.List;
 import java.util.Optional;
 
+import static org.antlr.v4.runtime.tree.xpath.XPath.findAll;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 @DataJpaTest
@@ -68,7 +70,66 @@ class MemberRepositoryTest {
         List<Member> result = memberRepository.findAll();
         assertThat(result.size()).isEqualTo(1);
         assertThat(result.get(0).getName()).isEqualTo("양쩡후이");
+    }
 
+    @Sql("/Insert-members.sql")
+    @DisplayName("테이블 member 에서 id가 3인 레코드 삭제하기")
+    @Test
+    public void deleteById3(){
+        //given
+
+        //when
+        memberRepository.deleteById(3L);
+        //then
+        List<Member> members = memberRepository.findAll();
+        assertThat(members.size()).isEqualTo(2);
+    }
+
+    @Sql("/Insert-members.sql")
+    @DisplayName("테이블 member 의 모든 레코드 삭제하기")
+    @Test
+    public void deleteAll() {
+        // given
+        List<Member> members = memberRepository.findAll();
+        assertThat(members.size()).isEqualTo(3);
+
+        // when
+        memberRepository.deleteAll();
+
+        // then
+        members = memberRepository.findAll();
+        assertThat(members.size()).isZero();
+    }
+
+    @DisplayName("테이블 member name이 'A', 'B'인 레코드를 한 번에 삽입하기")
+    @Test
+    public void saveMembers(){
+        //given
+        List<Member> members = List.of(new Member("A"), new Member("B"));
+
+        //when
+        memberRepository.saveAll(members);
+
+        //then
+        assertThat(memberRepository.findAll().size()).isEqualTo(2);
 
     }
+    @Sql("/Insert-members.sql")
+    @DisplayName("변경감지 기능을 통해 Id가 2인 레코드의 이름을 'B', 'BB'로 변경하기")
+    //@Transactional
+    @Test
+    public void update(){
+        //given
+        Member member = memberRepository.findById(2L).get();
+
+        //when
+        member.setName("BB");
+        //then
+        Member updatedMember = memberRepository.findById(2L).get();
+        assertThat(updatedMember.getName()).isEqualTo("BB");
+
+    }
+
+
+
 }
