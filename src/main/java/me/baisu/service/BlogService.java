@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class BlogService {
     private final BlogReepository blogRepository;
+
     public Article save(AddArticleRequest dto){
         return blogRepository.save(dto.toEntity());
     }
