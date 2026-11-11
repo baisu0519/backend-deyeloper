@@ -7,10 +7,7 @@ import me.baisu.dto.ArticleResponse;
 import me.baisu.service.BlogService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,9 +18,14 @@ public class BlogApoController {
     private final BlogService blogService;
 
     @PostMapping("/api/articles")
-    public ResponseEntity<Article> addArticle(@RequestBody AddArticleRequest request) {
+//    public ResponseEntity<Article> addArticle(@RequestBody AddArticleRequest request) {
+//        Article savedArticle = blogService.save(request);
+//        return ResponseEntity.status(HttpStatus.CREATED).body(savedArticle);
+//
+//    }
+    public ResponseEntity<ArticleResponse> addArticle(@RequestBody AddArticleRequest request) {
         Article savedArticle = blogService.save(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedArticle);
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ArticleResponse(savedArticle));
 
     }
     @GetMapping("/api/articles")
@@ -41,6 +43,21 @@ public class BlogApoController {
                 .map(ArticleResponse::new)
                 .toList();
         return ResponseEntity.ok().body(articleResponseList);
+    }
+
+    @GetMapping("/api/articles/{id}")
+    public ResponseEntity<ArticleResponse> getArticle(
+            @PathVariable Long id) {
+
+
+        return ResponseEntity.ok()
+                .body(new ArticleResponse(blogService.findById(id)));
+    }
+
+    @DeleteMapping("/api/articles/{id}")
+    public ResponseEntity<Void> deleteArticle(@PathVariable Long id) {
+        blogService.delete(id);
+        return ResponseEntity.ok().build();
     }
 
 

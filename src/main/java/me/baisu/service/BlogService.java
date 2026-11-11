@@ -22,4 +22,12 @@ public class BlogService {
     public List<Article>getAll(){
         return blogRepository.findAll();
     }
+    public Article findById(Long id) {
+        return blogRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("not found: " + id));
+    }
+
+    public void delete(Long id) {
+        blogRepository.deleteById(id);
+    }
 }
